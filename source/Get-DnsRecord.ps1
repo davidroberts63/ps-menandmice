@@ -1,8 +1,6 @@
 function Find-DnsRecord {
     [CmdletBinding()]
     param (
-        $root,
-        $session,
         $hostName,
         [switch]
         $allowDeepSearch
@@ -16,8 +14,6 @@ function Find-DnsRecord {
 function Get-DnsRecord {
     [CmdletBinding()]
     param (
-        $root,
-        $session,
         $hostName,
         [switch]
         $allowDeepSearch
@@ -65,7 +61,7 @@ function Get-DnsRecord {
         $foundRecord = $null
         $zonesToSearch | %{
             Write-Host "Looking for $hostname in $($_.name)"
-            $foundRecord = $_ | Get-DnsRecordInZone -root $root -session $session -hostName $hostname
+            $foundRecord = $_ | Get-DnsRecordInZone -hostName $hostname
         }
         
         if(-not $foundRecord) {

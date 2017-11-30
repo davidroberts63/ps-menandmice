@@ -1,8 +1,6 @@
 function Get-DnsRecordInZone {
     [CmdletBinding()]
     param (
-        $root,
-        $session,
         $hostName,
         [Parameter(ValueFromPipeline)]
         $zone

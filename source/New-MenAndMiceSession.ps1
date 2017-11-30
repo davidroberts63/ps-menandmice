@@ -6,10 +6,18 @@ function New-MenAndMiceSession {
         $credentials
     )
 
-    $result = Invoke-MenAndMiceRpcRequest $root 'Login' @{ loginName = $credentials.Username; password = $credentials.GetNetworkCredential().Password; server = $dnsServer }
+    $result = Invoke-MenAndMiceRpcRequest -root $root `
+        -method 'Login' `
+        -parameters @{ `
+            loginName = $credentials.Username; `
+            password = $credentials.GetNetworkCredential().Password; `
+            server = $dnsServer `
+        }
 
     $Script:MenAndMiceSession = New-Object -TypeName PsCustomObject -Property @{
-        RootUrl = $rootUrl;
+        RootUrl = $root;
         Session = $result.result.session
     }
+
+    $result | Write-Output
 }

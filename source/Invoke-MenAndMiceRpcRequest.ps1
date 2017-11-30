@@ -1,10 +1,9 @@
 function Invoke-MenAndMiceRpcRequest {
     [CmdletBinding()]
     param (
-        $root,
         $method,
         $parameters = @{},
-        $session = $null
+        $root
     )
 
     if(-not $root -and $Script:MenAndMiceSession) {
@@ -20,7 +19,7 @@ function Invoke-MenAndMiceRpcRequest {
         'params' = $parameters
     }
 
-    if(-not $session -and $Script:MenAndMiceSession) {
+    if($Script:MenAndMiceSession) {
         Write-Debug "Using session id"
         $session = $Script:MenAndMiceSession.Session
     }

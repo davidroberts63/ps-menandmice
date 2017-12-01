@@ -1,6 +1,3 @@
-queue:
-  name: Default
-
 steps:
 
 - script: |

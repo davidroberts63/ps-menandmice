@@ -1,4 +1,4 @@
-function Get-DnsRecordInZone {
+function Find-DnsRecordInZone {
     [CmdletBinding()]
     param (
         $hostName,

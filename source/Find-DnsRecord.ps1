@@ -48,7 +48,7 @@ function Find-DnsRecord {
         $foundRecord = $null
         $zonesToSearch | %{
             Write-Host "Looking for $hostname in $($_.name)"
-            $foundRecord = $_ | Get-DnsRecordInZone -hostName $hostname
+            $foundRecord = $_ | Find-DnsRecordInZone -hostName $hostname
         }
         
         if(-not $foundRecord) {

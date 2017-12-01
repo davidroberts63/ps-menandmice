@@ -1,8 +1,6 @@
 function Find-DnsRecord {
     [CmdletBinding()]
     param (
-        $root,
-        $session,
         $hostName,
         [switch]
         $allowDeepSearch
@@ -16,8 +14,6 @@ function Find-DnsRecord {
 function Get-DnsRecord {
     [CmdletBinding()]
     param (
-        $root,
-        $session,
         $hostName,
         [switch]
         $allowDeepSearch
@@ -32,7 +28,7 @@ function Get-DnsRecord {
         $allZones = @()
         do {
             Write-Verbose "Getting DNS zones: $offset"
-            $zones = Invoke-MenAndMiceRpcRequest $root 'GetDNSZones' @{ offset = $offset; limit = $pageSize; filter = 'type:Master'} $session
+            $zones = Invoke-MenAndMiceRpcRequest -method 'GetDNSZones' -parameters @{ offset = $offset; limit = $pageSize; filter = 'type:Master'}
             if($zones.error) {
                 Write-Error $zones.error
             }
@@ -65,7 +61,7 @@ function Get-DnsRecord {
         $foundRecord = $null
         $zonesToSearch | %{
             Write-Host "Looking for $hostname in $($_.name)"
-            $foundRecord = $_ | Get-DnsRecordInZone -root $root -session $session -hostName $hostname
+            $foundRecord = $_ | Get-DnsRecordInZone -hostName $hostname
         }
         
         if(-not $foundRecord) {
@@ -73,7 +69,7 @@ function Get-DnsRecord {
         }
 
         Write-Verbose 'Getting IP address range of record'
-        $range = Invoke-MenAndMiceRpcRequest $root 'GetRangeByIPAddress' @{ addrRef = $foundRecord.data } $session
+        $range = Invoke-MenAndMiceRpcRequest -method 'GetRangeByIPAddress' -parameters @{ addrRef = $foundRecord.data }
         if($range) {
             $foundRecord | Add-Member -NotePropertyName range -NotePropertyValue $range.result.range
         }

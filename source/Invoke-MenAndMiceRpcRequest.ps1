@@ -1,11 +1,15 @@
 function Invoke-MenAndMiceRpcRequest {
     [CmdletBinding()]
     param (
-        $root,
         $method,
         $parameters = @{},
-        $session
+        $root
     )
+
+    if(-not $root -and $Script:MenAndMiceSession) {
+        Write-Debug "Using root url from session: $($Script:MenAndMiceSession.RootUrl)"
+        $root = $Script:MenAndMiceSession.RootUrl
+    }
 
     $url = "$root/_mmwebext/mmwebext.dll?Soap"
 
@@ -13,6 +17,11 @@ function Invoke-MenAndMiceRpcRequest {
         'jsonrpc' = '2.0';
         'method' = $method;
         'params' = $parameters
+    }
+
+    if($Script:MenAndMiceSession) {
+        Write-Debug "Using session id"
+        $session = $Script:MenAndMiceSession.Session
     }
 
     if($session) {

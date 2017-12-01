@@ -1,8 +1,6 @@
 function Get-DnsRecordInZone {
     [CmdletBinding()]
     param (
-        $root,
-        $session,
         $hostName,
         [Parameter(ValueFromPipeline)]
         $zone
@@ -14,7 +12,7 @@ function Get-DnsRecordInZone {
         $totalRecords = 1
         do {
             Write-Verbose "Getting DNS records in $($zone.name): $offset"
-            $records = Invoke-MenAndMiceRpcRequest $root 'GetDNSRecords' @{ dnsZoneRef = $zone.ref; offset = $offset; limit = $pageSize; sortBy = 'name' } $session
+            $records = Invoke-MenAndMiceRpcRequest -method 'GetDNSRecords' -parameters @{ dnsZoneRef = $zone.ref; offset = $offset; limit = $pageSize; sortBy = 'name' }
             if($records.error) {
                 Write-Error $records.error
             }
